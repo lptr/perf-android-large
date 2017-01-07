@@ -66,11 +66,6 @@ androidResourceValueChange {
   apply-android-resource-value-change-to = "./outissue/carnally/src/main/res/values/strings.xml"
 }
 
-androidResourceValueChange {
-    tasks = [":phthalic:assembleDebug"]
-    apply-android-resource-value-change-to = "./outissue/carnally/src/main/res/values/strings.xml"
-}
-
 classpathResourceChange {
   tasks = [":phthalic:assembleDebug"]
   buck {

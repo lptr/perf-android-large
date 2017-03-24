@@ -1,0 +1,46 @@
+def CACHEABLE_TASK_NAMES = [
+	"com.android.build.gradle.tasks.factory.AndroidJavaCompile",
+	"com.android.build.gradle.tasks.ExtractAnnotations",
+	"com.android.build.gradle.tasks.MergeResources"
+] as Set
+
+def count = 0
+def alreadyCacheable = 0
+def enabledTaskTypes = [] as SortedSet
+
+allprojects{
+	afterEvaluate {
+		tasks.matching { task ->
+			if (task.outputs.cachingState.enabled) {
+				alreadyCacheable++
+				return false
+			}
+
+			Class<?> type = task.getClass()
+			if (type.name.endsWith("_Decorated")) {
+				type = type.superclass
+			}
+			if (AbstractCopyTask.isAssignableFrom(type)) {
+				return false
+			}
+			def typeName = type.name
+			// if (!CACHEABLE_TASK_NAMES.contains(typeName)) {
+			// 	return false
+			// }
+
+			enabledTaskTypes.add typeName
+
+			return true
+		}.all { task ->
+			count++
+			task.outputs.cacheIf { true }
+		}
+	}
+}
+
+gradle.buildFinished {
+	println "Set cachable on $count tasks ($alreadyCacheable was already cacheable)"
+	enabledTaskTypes.each { typeName ->
+		println "  - $typeName"
+	}
+}

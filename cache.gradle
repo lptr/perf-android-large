@@ -1,0 +1,17 @@
+def CACHEABLE_TASK_NAMES = [
+	"com.android.build.gradle.tasks.factory.AndroidJavaCompile",
+	"com.android.build.gradle.tasks.ExtractAnnotations",
+	"com.android.build.gradle.tasks.MergeResources"
+] as Set
+
+afterEvaluate {
+	tasks.matching { task ->
+		String typeName = task.getClass().name
+		if (typeName.endsWith("_Decorated")) {
+			typeName = task.getClass().superclass.name
+		}
+		CACHEABLE_TASK_NAMES.contains(typeName)
+	}.all { task ->
+		task.outputs.cacheIf { true }
+	}
+}

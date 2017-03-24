@@ -6,14 +6,17 @@ buildscript {
 
     dependencies {
         classpath 'com.android.tools.build:gradle:2.5.0-alpha-preview-01'
+        // classpath 'com.android.tools.build:gradle:2.5.0-dev'
         classpath ('com.uber:okbuck:0.16.3') {
           exclude module: 'gradle'
         }
     }
 }
 
-allprojects {
-    project -> project.apply from: rootProject.file('dependencies.gradle')
+allprojects { project ->
+    project.apply from: rootProject.file('dependencies.gradle')
+    project.apply from: rootProject.file('cache.gradle')
+
     repositories {
         jcenter()
     }

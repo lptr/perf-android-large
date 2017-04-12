@@ -120,6 +120,7 @@ def addCommonConfigurationForAndroidModules(Project project) {
             minSdkVersion config.build.minSdkVersion
             targetSdkVersion config.build.targetSdkVersion
             vectorDrawables.useSupportLibrary = true
+            javaCompileOptions.annotationProcessorOptions.includeCompileClasspath = false
         }
 
         compileOptions {
